@@ -19,8 +19,8 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api")
 public class PostController {
-    private PostService postService;
-    private PostRepository postRepository;
+    private final PostService postService;
+    private final PostRepository postRepository;
 
     @PostMapping("/post")
     public ResponseEntity<CommonResponseDto> createPost(@RequestBody PostReqeustDto reqeustDto, @AuthenticationPrincipal MemberDetailsImpl memberDetails) {
@@ -34,12 +34,12 @@ public class PostController {
         return ResponseEntity.ok().body(new CommonResponseDto("게시물 작성 성공", HttpStatus.OK.value()));
     }
 
-    @GetMapping("/post/{post_id}")     //no-auth
+    @GetMapping("/no-auth/post/{post_id}")     //no-auth
     public PostResponseDto getPost(@PathVariable Long post_id) {
         return postService.getPost(post_id);
     }
 
-    @GetMapping("/post/news_feed_list")    //no-auth
+    @GetMapping("/no-auth/post/news_feed_list")    //no-auth
     public List<PostListResponseDto> getPostList() {
         return postRepository.findAllByOrderByCreatedAtDesc().stream().map(PostListResponseDto::new).toList();
     }
@@ -57,9 +57,9 @@ public class PostController {
     }
 
     @DeleteMapping("/post/{post_id}")
-    public ResponseEntity<CommonResponseDto> deletePost(@PathVariable Long id, @AuthenticationPrincipal MemberDetailsImpl memberDetails) {
+    public ResponseEntity<CommonResponseDto> deletePost(@PathVariable Long post_id, @AuthenticationPrincipal MemberDetailsImpl memberDetails) {
         try {
-            postService.deletePost(id,memberDetails);
+            postService.deletePost(post_id,memberDetails);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest()
                     .body(new CommonResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));

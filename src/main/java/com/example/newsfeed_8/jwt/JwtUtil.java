@@ -17,7 +17,7 @@ import java.util.Date;
 @Component
 public class JwtUtil {
     public static final String AUTHORIZATION_HEADER = "Authorization";
-    public static final String BEARER_PREFIX = "Bearer";
+    public static final String BEARER_PREFIX = "Bearer ";
 
     @Value("${jwt.secret.key}")
     private String secretKey;
