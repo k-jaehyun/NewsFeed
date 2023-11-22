@@ -31,7 +31,7 @@ public class PostController {
                     .body(new CommonResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
         }
 
-        return ResponseEntity.ok().body(new CommonResponseDto("포스팅 성공", HttpStatus.OK.value()));
+        return ResponseEntity.ok().body(new CommonResponseDto("게시물 작성 성공", HttpStatus.OK.value()));
     }
 
     @GetMapping("/post/{post_id}")     //no-auth
@@ -45,13 +45,28 @@ public class PostController {
     }
 
     @PatchMapping("/post/{post_id}")
-    public String updatePost(@PathVariable Long post_id, @RequestBody PostReqeustDto reqeustDto, @AuthenticationPrincipal MemberDetailsImpl memberDetails) {
-        return postService.updatePost(post_id,reqeustDto,memberDetails);
+    public ResponseEntity<CommonResponseDto> updatePost(@PathVariable Long post_id, @RequestBody PostReqeustDto reqeustDto, @AuthenticationPrincipal MemberDetailsImpl memberDetails) {
+        try {
+            postService.updatePost(post_id,reqeustDto,memberDetails);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest()
+                    .body(new CommonResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
+        }
+
+        return ResponseEntity.ok().body(new CommonResponseDto("게시물 수정 성공", HttpStatus.OK.value()));
     }
 
     @DeleteMapping("/post/{post_id}")
-    public String deletePost(@PathVariable Long id, @AuthenticationPrincipal MemberDetailsImpl memberDetails) {
-        return postService.deletePost(id,memberDetails);
+    public ResponseEntity<CommonResponseDto> deletePost(@PathVariable Long id, @AuthenticationPrincipal MemberDetailsImpl memberDetails) {
+        try {
+            postService.deletePost(id,memberDetails);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest()
+                    .body(new CommonResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
+        }
+
+        return ResponseEntity.ok().body(new CommonResponseDto("게시물 삭제 성공", HttpStatus.OK.value()));
+
     }
 
 
