@@ -1,6 +1,6 @@
 package com.example.newsfeed_8.entity;
 
-import com.example.newsfeed_8.dto.PostReqeustDto;
+import com.example.newsfeed_8.dto.PostRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,16 +27,16 @@ public class Post extends Timestamped {
     @Column
     private String img;
 
-    public Post(PostReqeustDto reqeustDto, Member member) {
+    public Post(PostRequestDto requestDto, Member member) {
         this.member = member;
-        this.title = reqeustDto.getTitle();
-        this.content = reqeustDto.getContent();
-        this.img = reqeustDto.getImg();
+        this.title = requestDto.getTitle();
+        this.content = requestDto.getContent();
+        this.img = requestDto.getImg();
     }
 
-    public void update(PostReqeustDto reqeustDto) {
-        this.title=reqeustDto.getTitle();
-        this.content= reqeustDto.getContent();
-        this.img= reqeustDto.getImg();
+    public void update(PostRequestDto requestDto) {
+        this.title=requestDto.getTitle();
+        this.content= requestDto.getContent();
+        this.img= requestDto.getImg();
     }
 }

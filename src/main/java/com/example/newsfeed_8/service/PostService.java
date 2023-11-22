@@ -1,6 +1,6 @@
 package com.example.newsfeed_8.service;
 
-import com.example.newsfeed_8.dto.PostReqeustDto;
+import com.example.newsfeed_8.dto.PostRequestDto;
 import com.example.newsfeed_8.dto.PostResponseDto;
 import com.example.newsfeed_8.entity.Member;
 import com.example.newsfeed_8.entity.Post;
@@ -16,8 +16,8 @@ public class PostService {
 
     private final PostRepository postRepository;
 
-    public void createPost(PostReqeustDto reqeustDto, Member member) {
-        postRepository.save(new Post(reqeustDto,member));
+    public void createPost(PostRequestDto requestDto, Member member) {
+        postRepository.save(new Post(requestDto,member));
     }
 
     public PostResponseDto getPost(Long postId) {
@@ -29,12 +29,12 @@ public class PostService {
     }
 
     @Transactional
-    public String updatePost(Long postId, PostReqeustDto reqeustDto, MemberDetailsImpl memberDetails) {
+    public String updatePost(Long postId, PostRequestDto requestDto, MemberDetailsImpl memberDetails) {
         Member member = memberDetails.getMember();
 
         Post post = verifyMember(member,postId);
 
-        post.update(reqeustDto);
+        post.update(requestDto);
 
         return "수정 성공";
     }
