@@ -8,7 +8,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class MeberRequestDto {
+public class MemberRequestDto {
     @Pattern(regexp = "^[a-z0-9]{4,10}")
     private String userId;
 
