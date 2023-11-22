@@ -31,7 +31,6 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.CREATED.value())
                 .body(new CommonResponseDto("회원가입 성공", HttpStatus.CREATED.value()));
     }
-
     @PostMapping("/no-auth/member/login")
     public ResponseEntity<CommonResponseDto> login(@RequestBody MeberRequestDto meberRequestDto, HttpServletResponse res){
         try {
