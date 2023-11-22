@@ -2,7 +2,7 @@ package com.example.newsfeed_8.jwt;
 
 
 import com.example.newsfeed_8.dto.CommonResponseDto;
-import com.example.newsfeed_8.repository.MemberDetailsService;
+import com.example.newsfeed_8.service.MemberDetailsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;

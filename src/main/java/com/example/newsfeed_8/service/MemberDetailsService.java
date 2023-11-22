@@ -1,6 +1,7 @@
-package com.example.newsfeed_8.repository;
+package com.example.newsfeed_8.service;
 
 import com.example.newsfeed_8.entity.Member;
+import com.example.newsfeed_8.repository.MemberRepository;
 import com.example.newsfeed_8.security.MemberDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

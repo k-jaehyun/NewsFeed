@@ -2,12 +2,13 @@ package com.example.newsfeed_8.config;
 
 import com.example.newsfeed_8.jwt.JwtAuthorizationFilter;
 import com.example.newsfeed_8.jwt.JwtUtil;
-import com.example.newsfeed_8.repository.MemberDetailsService;
+import com.example.newsfeed_8.service.MemberDetailsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -42,7 +43,8 @@ public class WebSecurityConfig {
         http.authorizeHttpRequests((authorizeHttpRequests)->
                 authorizeHttpRequests
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                        .requestMatchers("api/no-auth/**").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/api/member").permitAll()
+                        .requestMatchers("/api/member/login").permitAll()
                         .anyRequest().authenticated()
                 );
 
