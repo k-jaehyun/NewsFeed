@@ -3,7 +3,7 @@ package com.example.newsfeed_8.controller;
 import com.example.newsfeed_8.dto.CommonResponseDto;
 import com.example.newsfeed_8.dto.MeberRequestDto;
 import com.example.newsfeed_8.jwt.JwtUtil;
-import com.example.newsfeed_8.service.MeberService;
+import com.example.newsfeed_8.service.MemberService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,12 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class MemberController {
-    private final MeberService meberService;
+    private final MemberService memberService;
     private final JwtUtil jwtUtil;
     @PostMapping("/no-auth/member")
     public ResponseEntity<CommonResponseDto> signup(@Valid @RequestBody MeberRequestDto meberRequestDto){
         try {
-            meberService.signup(meberRequestDto);
+            memberService.signup(meberRequestDto);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest()
                     .body(new CommonResponseDto("중복된 아이디 입니다.", HttpStatus.BAD_REQUEST.value()));
@@ -35,7 +35,7 @@ public class MemberController {
     @PostMapping("/no-auth/member/login")
     public ResponseEntity<CommonResponseDto> login(@RequestBody MeberRequestDto meberRequestDto, HttpServletResponse res){
         try {
-            meberService.login(meberRequestDto);
+            memberService.login(meberRequestDto);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest()
                     .body(new CommonResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
