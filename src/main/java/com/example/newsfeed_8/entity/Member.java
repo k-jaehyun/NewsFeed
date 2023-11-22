@@ -4,11 +4,15 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name="member")
 @Getter
 @NoArgsConstructor
 public class Member {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,6 +28,9 @@ public class Member {
 
     @Column(nullable = false)
     private String introduction;
+
+    @OneToMany(mappedBy = "member")
+    private List<Post> postList = new ArrayList<>();
 
     public Member(String userId, String password, String email, String introduction) {
         this.userId = userId;
