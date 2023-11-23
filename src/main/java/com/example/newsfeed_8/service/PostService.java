@@ -39,9 +39,9 @@ public class PostService {
         return "수정 성공";
     }
 
-    public String deletePost(Long id, MemberDetailsImpl memberDetails) {
+    public String deletePost(Long postId, MemberDetailsImpl memberDetails) {
         Member member = memberDetails.getMember();
-        Post post = verifyMember(member,id);
+        Post post = verifyMember(member,postId);
         postRepository.delete(post);
         return "삭제 성공";
     }
