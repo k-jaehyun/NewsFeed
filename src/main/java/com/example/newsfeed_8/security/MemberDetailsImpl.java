@@ -1,10 +1,9 @@
 package com.example.newsfeed_8.security;
 
 import com.example.newsfeed_8.entity.Member;
+import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.Collection;
 
 public class MemberDetailsImpl implements UserDetails {
 
@@ -12,6 +11,10 @@ public class MemberDetailsImpl implements UserDetails {
 
     public MemberDetailsImpl(Member member) {
         this.member = member;
+    }
+
+    public Member getMember() {
+        return member;
     }
 
     @Override

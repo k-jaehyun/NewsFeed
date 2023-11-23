@@ -9,6 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class MemberRequestDto {
+
     @Pattern(regexp = "^[a-z0-9]{4,10}")
     private String userId;
 
@@ -18,6 +19,6 @@ public class MemberRequestDto {
     @Email
     private String email;
 
-    @Size(min=1, max=30)
+    @Size(min = 1, max = 30)
     private String introduction;
 }
