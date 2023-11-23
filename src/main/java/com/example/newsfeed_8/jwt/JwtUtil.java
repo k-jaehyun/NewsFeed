@@ -72,4 +72,16 @@ public class JwtUtil {
                         .signWith(key, signatureAlgorithm)
                         .compact();
     }
+
+    public Long getExpiration(String accessToken){
+        Date expiration = Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(accessToken)
+                .getBody()
+                .getExpiration();
+
+        Long now = new Date().getTime();
+        return (expiration.getTime() - now);
+    }
 }
