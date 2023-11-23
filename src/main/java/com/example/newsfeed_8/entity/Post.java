@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name="post")
+@Table(name = "post")
 @Getter
 @NoArgsConstructor
 public class Post extends Timestamped {
