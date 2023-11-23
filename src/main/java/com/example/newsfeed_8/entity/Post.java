@@ -35,6 +35,9 @@ public class Post extends Timestamped {
     @Column
     private int likes =0;
 
+    @OneToMany(mappedBy = "post")
+    private List<PostComment> postCommentList = new ArrayList<>();
+
     public Post(PostRequestDto requestDto, Member member) {
         this.member = member;
         this.title = requestDto.getTitle();
