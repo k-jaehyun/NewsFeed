@@ -46,7 +46,37 @@ public class MemberService {
             MemberDto.UpdateEmailRequestDto dto) throws Exception {
 
         member.setEmail(dto.getEmail());
+        memberRepository.save(member);
 
-        return new CommonResponseDto(HttpStatus.OK.value(), "profile update success");
+        return new CommonResponseDto(HttpStatus.OK.value(), "email update success");
+    }
+
+    public CommonResponseDto updatePassword(Member member,
+            MemberDto.UpdatePasswordRequestDto dto) throws Exception {
+
+        try {
+            if (!passwordEncoder.matches(dto.getOriginPassword(), member.getPassword())) {
+                throw new Exception("password update failed: Origin password not match");
+            }
+            if (!dto.getNewPassword().equals(dto.getNewPasswordCheck())) {
+                throw new Exception("password update failed: New password not match");
+            }
+        } catch (Exception e) {
+            return new CommonResponseDto(404, e.getMessage());
+        }
+
+        member.setPassword(passwordEncoder.encode(dto.getNewPassword()));
+        memberRepository.save(member);
+
+        return new CommonResponseDto(HttpStatus.OK.value(), "password update success");
+    }
+
+    public CommonResponseDto updateIntroduction(Member member,
+            MemberDto.UpdateIntroductionRequestDto dto) throws Exception {
+
+        member.setIntroduction(dto.getIntroduction());
+        memberRepository.save(member);
+
+        return new CommonResponseDto(HttpStatus.OK.value(), "introduction update success");
     }
 }

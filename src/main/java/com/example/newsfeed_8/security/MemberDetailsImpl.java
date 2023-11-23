@@ -14,7 +14,7 @@ public class MemberDetailsImpl implements UserDetails {
     }
 
     public Member getMember() {
-        return member;
+        return this.member;
     }
 
     @Override

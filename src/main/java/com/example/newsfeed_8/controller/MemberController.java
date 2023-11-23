@@ -55,13 +55,31 @@ public class MemberController {
         return ResponseEntity.ok().body(new CommonResponseDto("로그인 성공", HttpStatus.OK.value()));
     }
 
-    @PatchMapping("/member/email")
+    @PatchMapping("/email")
     public ResponseEntity<CommonResponseDto> updateEmail(
-            @AuthenticationPrincipal MemberDetailsImpl memberDetails,
-            @RequestBody MemberDto.UpdateEmailRequestDto updateEmailRequestDto) throws Exception {
+            @RequestBody MemberDto.UpdateEmailRequestDto requestDto,
+            @AuthenticationPrincipal MemberDetailsImpl memberDetails) throws Exception {
 
         return ResponseEntity.ok()
-                .body(memberService.updateEmail(memberDetails.getMember(), updateEmailRequestDto));
+                .body(memberService.updateEmail(memberDetails.getMember(), requestDto));
+    }
+
+    @PatchMapping("/password")
+    public ResponseEntity<CommonResponseDto> updatePassword(
+            @RequestBody MemberDto.UpdatePasswordRequestDto requestDto,
+            @AuthenticationPrincipal MemberDetailsImpl memberDetails) throws Exception {
+
+        return ResponseEntity.ok()
+                .body(memberService.updatePassword(memberDetails.getMember(), requestDto));
+    }
+
+    @PatchMapping("/introduction")
+    public ResponseEntity<CommonResponseDto> updateIntroduction(
+            @RequestBody MemberDto.UpdateIntroductionRequestDto requestDto,
+            @AuthenticationPrincipal MemberDetailsImpl memberDetails) throws Exception {
+
+        return ResponseEntity.ok()
+                .body(memberService.updateIntroduction(memberDetails.getMember(), requestDto));
     }
 
 }
