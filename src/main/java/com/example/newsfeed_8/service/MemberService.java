@@ -3,7 +3,9 @@ package com.example.newsfeed_8.service;
 import com.example.newsfeed_8.dto.MemberRequestDto;
 import com.example.newsfeed_8.entity.Member;
 import com.example.newsfeed_8.repository.MemberRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,8 @@ import org.springframework.stereotype.Service;
 public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final RedisTemplate<String, String> redisTemplate;
+
 
     public void signup(MemberRequestDto memberRequestDto) {
         String userId = memberRequestDto.getUserId();
@@ -36,5 +40,10 @@ public class MemberService {
         if(!passwordEncoder.matches(password, member.getPassword())){
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
+    }
+
+    public void logout(HttpServletRequest request) {
+        String accesstoken = request.getHeader("Authorization").substring(7);
+
     }
 }

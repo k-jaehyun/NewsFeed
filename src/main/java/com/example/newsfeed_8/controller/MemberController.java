@@ -4,11 +4,14 @@ import com.example.newsfeed_8.dto.CommonResponseDto;
 import com.example.newsfeed_8.dto.MemberRequestDto;
 import com.example.newsfeed_8.jwt.JwtUtil;
 import com.example.newsfeed_8.service.MemberService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,5 +49,15 @@ public class MemberController {
         return ResponseEntity.ok().body(new CommonResponseDto("로그인 성공", HttpStatus.OK.value()));
     }
 
-
+    @PostMapping("/logout")
+    public ResponseEntity<CommonResponseDto> logout(HttpServletRequest request){
+        String token = request.getHeader("Authorization");
+        String redisToken = token.substring(7);
+        long remainingTime = jwtUtil.getRemainingTime(redisToken);
+        if(remainingTime >0){
+            jwtUtil.blacklistToken((redisToken));
+            System.out.println("토큰 삭제");
+        }
+        return ResponseEntity.ok().body(new CommonResponseDto("로그아웃 성공", HttpStatus.OK.value()));
+    }
 }
