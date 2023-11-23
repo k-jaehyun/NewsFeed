@@ -47,6 +47,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/member/login").permitAll()
                         .requestMatchers("/api/post/{post_id}").permitAll()
                         .requestMatchers("/api/post/news_feed_list").permitAll()
+                        .requestMatchers("/api/comment/{postId}/noAuth").permitAll()
                         .anyRequest().authenticated()
                 );
 
