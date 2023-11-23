@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="post")
+@Table(name = "post")
 @Getter
 @NoArgsConstructor
 public class Post extends Timestamped {
