@@ -52,6 +52,9 @@ public class PostService {
     public Long toggleLikePost(Long postId, Boolean booleanLike, MemberDetailsImpl memberDetails) {
         Member member = memberDetails.getMember();
         Post post = findPostById(postId);
+
+        if (member.getUserId().equals(post.getMember().getUserId())) { return null; }
+
         List<String> memberIdList = post.getMemberIdList();
         for (String s : memberIdList) {
             if (s.equals(member.getUserId()) && booleanLike) {

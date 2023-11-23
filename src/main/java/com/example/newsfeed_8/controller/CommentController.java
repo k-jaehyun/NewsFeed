@@ -15,12 +15,12 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/comments")
 public class CommentController {
 
     private final CommentService commentService;
 
-    @PostMapping("/comment/{postId}")
+    @PostMapping("/{postId}")
     private ResponseEntity<CommonResponseDto> createComment(@PathVariable Long postId, @RequestBody CommentRequestDto requestDto, @AuthenticationPrincipal MemberDetailsImpl memberDetails) {
         try {
             commentService.createComment(postId, requestDto, memberDetails);
@@ -32,9 +32,13 @@ public class CommentController {
         return ResponseEntity.ok().body(new CommonResponseDto("댓글 작성 성공", HttpStatus.OK.value()));
     }
 
-    @GetMapping("/comment/{postId}/noAuth")  //noauth
+    @GetMapping("/{postId}")  //no-auth
     private List<CommentResponsDto> getComments(@PathVariable Long postId) {
         return commentService.getComments(postId);
     }
+
+
+
+
 
 }

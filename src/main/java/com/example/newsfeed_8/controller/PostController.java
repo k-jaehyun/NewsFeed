@@ -14,12 +14,12 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/posts")
 public class PostController {
     private final PostService postService;
     private final PostRepository postRepository;
 
-    @PostMapping("/post")
+    @PostMapping("")
     public ResponseEntity<CommonResponseDto> createPost(@RequestBody PostRequestDto requestDto, @AuthenticationPrincipal MemberDetailsImpl memberDetails) {
         try {
             postService.createPost(requestDto, memberDetails.getMember());
@@ -31,17 +31,17 @@ public class PostController {
         return ResponseEntity.ok().body(new CommonResponseDto("게시물 작성 성공", HttpStatus.OK.value()));
     }
 
-    @GetMapping("/post/{postId}")     //no-auth
+    @GetMapping("/{postId}")     //no-auth
     public PostResponseDto getPost(@PathVariable Long postId) {
         return postService.getPost(postId);
     }
 
-    @GetMapping("/post/news_feed_list")    //no-auth
+    @GetMapping("/news_feed_list")    //no-auth
     public List<PostListResponseDto> getPostList() {
         return postRepository.findAllByOrderByCreatedAtDesc().stream().map(PostListResponseDto::new).toList();
     }
 
-    @PatchMapping("/post/{postId}")
+    @PatchMapping("/{postId}")
     public ResponseEntity<CommonResponseDto> updatePost(@PathVariable Long postId, @RequestBody PostRequestDto requestDto, @AuthenticationPrincipal MemberDetailsImpl memberDetails) {
         try {
             postService.updatePost(postId, requestDto, memberDetails);
@@ -53,7 +53,7 @@ public class PostController {
         return ResponseEntity.ok().body(new CommonResponseDto("게시물 수정 성공", HttpStatus.OK.value()));
     }
 
-    @DeleteMapping("/post/{postId}")
+    @DeleteMapping("/{postId}")
     public ResponseEntity<CommonResponseDto> deletePost(@PathVariable Long postId, @AuthenticationPrincipal MemberDetailsImpl memberDetails) {
         try {
             postService.deletePost(postId, memberDetails);
@@ -66,7 +66,7 @@ public class PostController {
 
     }
 
-    @GetMapping("/posts/{postId}/{booleanLike}")
+    @GetMapping("/{postId}/{booleanLike}")
     public ResponseEntity<LikesResponseDto> toggleLikePost(@PathVariable Long postId, @PathVariable Boolean booleanLike, @AuthenticationPrincipal MemberDetailsImpl memberDetails) {
 
             Long likes = postService.toggleLikePost(postId, booleanLike, memberDetails);
