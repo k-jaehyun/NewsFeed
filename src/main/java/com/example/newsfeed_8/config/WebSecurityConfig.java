@@ -45,6 +45,8 @@ public class WebSecurityConfig {
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/member").permitAll()
                         .requestMatchers("/api/member/login").permitAll()
+                        .requestMatchers("/api/post/{post_id}").permitAll()
+                        .requestMatchers("/api/post/news_feed_list").permitAll()
                         .anyRequest().authenticated()
                 );
 
