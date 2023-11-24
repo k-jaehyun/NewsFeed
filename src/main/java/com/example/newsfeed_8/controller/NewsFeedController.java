@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/posts")
 public class NewsFeedController {
     private final PostService postService;
 
@@ -26,7 +26,7 @@ public class NewsFeedController {
 
 
     // 로그인 한 사용자 게시물을 제외한 모든 게시물조회
-    @GetMapping("/others")
+    @GetMapping("/otherposts")
     public List<PostResponseDto> getOtherPostList(@AuthenticationPrincipal MemberDetailsImpl memberDetails) {
         try {
             return postService.getOtherPostList(memberDetails);
@@ -36,7 +36,7 @@ public class NewsFeedController {
         }
     }
     // 로그인 한 사용자 게시물만 조회
-    @GetMapping("/own")
+    @GetMapping("/myposts")
     public List<PostResponseDto> getOwnPostList(@AuthenticationPrincipal MemberDetailsImpl memberDetails) {
         try {
             return postService.getOwnPostList(memberDetails);
