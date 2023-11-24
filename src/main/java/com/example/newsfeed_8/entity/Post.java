@@ -5,8 +5,11 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
-@Table(name="post")
+@Table(name = "post")
 @Getter
 @NoArgsConstructor
 public class Post extends Timestamped {
@@ -27,6 +30,12 @@ public class Post extends Timestamped {
     @Column
     private String img;
 
+    @OneToMany(mappedBy = "post")  //LAZY 주의
+    private List<Comment> commentList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "post")  //LAZY 주의
+    private List<Like> likeList = new ArrayList<>();
+
     public Post(PostRequestDto requestDto, Member member) {
         this.member = member;
         this.title = requestDto.getTitle();
@@ -39,4 +48,5 @@ public class Post extends Timestamped {
         this.content= requestDto.getContent();
         this.img= requestDto.getImg();
     }
+
 }

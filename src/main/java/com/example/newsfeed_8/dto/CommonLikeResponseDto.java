@@ -11,13 +11,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @AllArgsConstructor
-public class CommonResponseDto {
-
+public class CommonLikeResponseDto {
     private String msg;
     private Integer statusCode;
-
-    public CommonResponseDto(Integer statusCode, String msg) {
-        this.statusCode = statusCode;
-        this.msg = msg;
-    }
+    private Long likes;
 }
