@@ -2,6 +2,7 @@ package com.example.newsfeed_8.service;
 
 import com.example.newsfeed_8.dto.MemberRequestDto;
 import com.example.newsfeed_8.entity.Member;
+import com.example.newsfeed_8.jwt.JwtUtil;
 import com.example.newsfeed_8.repository.MemberRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final RedisTemplate<String, String> redisTemplate;
+    private final JwtUtil jwtUtil;
 
 
     public void signup(MemberRequestDto memberRequestDto) {
@@ -43,7 +45,13 @@ public class MemberService {
     }
 
     public void logout(HttpServletRequest request) {
-        String accesstoken = request.getHeader("Authorization").substring(7);
+        String token = request.getHeader("Authorization");
+        String redisToken = token.substring(7);
+        long remainingTime = jwtUtil.getRemainingTime(redisToken);
+        if(remainingTime >0){
+            jwtUtil.blacklistToken((redisToken));
+            System.out.println("토큰 삭제");
+        }
 
     }
 }
