@@ -33,8 +33,8 @@ public class Post extends Timestamped {
     @OneToMany(mappedBy = "post")  //LAZY 주의
     private List<Comment> commentList = new ArrayList<>();
 
-//    @OneToMany(mappedBy = "post")  //LAZY 주의
-//    private List<Like> likeList = new ArrayList<>();
+    @OneToMany(mappedBy = "post")  //LAZY 주의
+    private List<Like> likeList = new ArrayList<>();
 
     public Post(PostRequestDto requestDto, Member member) {
         this.member = member;

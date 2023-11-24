@@ -37,8 +37,8 @@ public class Member {
     @OneToMany(mappedBy = "member")  //LAZY 주의
     private List<Comment> commentList = new ArrayList<>();
 
-//    @OneToMany(mappedBy = "member")  //LAZY 주의
-//    private List<Like> likeList = new ArrayList<>();
+    @OneToMany(mappedBy = "member")  //LAZY 주의
+    private List<Like> likeList = new ArrayList<>();
 
     public Member(String userId, String password, String email, String introduction) {
         this.userId = userId;

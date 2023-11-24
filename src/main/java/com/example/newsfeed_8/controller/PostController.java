@@ -66,11 +66,10 @@ public class PostController {
 
     }
 
-//    @PostMapping("/{postId}/like")
-//    public ResponseEntity<LikeResponseDto> toggleLikePost(@PathVariable Long postId, @AuthenticationPrincipal MemberDetailsImpl memberDetails) {
-//        postService.toggleLikePost(postId,memberDetails);
-//
-//    }
+    @PostMapping("/{postId}/like")
+    public ResponseEntity<CommonLikeResponseDto> toggleLikePost(@PathVariable Long postId, @AuthenticationPrincipal MemberDetailsImpl memberDetails) {
+        return postService.toggleLikePost(postId,memberDetails);
+    }
 
 
 }
