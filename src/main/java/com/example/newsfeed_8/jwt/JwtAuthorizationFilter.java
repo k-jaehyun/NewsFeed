@@ -35,7 +35,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         String token = jwtUtil.resolveToken(request);
 
         if(Objects.nonNull(token)){
-            if(jwtUtil.validateToken(token)){
+                if(jwtUtil.validateToken(token)){
                 Claims info = jwtUtil.getMemberInfoFromToken(token);
 
                 String userId = info.getSubject();

@@ -60,9 +60,9 @@ public class PostService {
 
     // 뉴스 피드
     // 현재 로그인한 사용자가 자신의 글을 제외한 다른 사용자의 모든 게시글 조회
-    public List<PostResponseDto> getOtherPostList(PostRequestDto requestDto, MemberDetailsImpl memberDetails) {
+    public List<PostResponseDto> getOtherPostList(MemberDetailsImpl memberDetails) {
         Member currentMember = memberDetails.getMember();
-//        Long currentMemberId = memberDetails.getMember().getId();
+
 
         List<Post> otherUserPosts = postRepository.findByMemberIdNot(currentMember.getId());
 

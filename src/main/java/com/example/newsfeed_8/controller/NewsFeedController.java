@@ -24,15 +24,17 @@ public class NewsFeedController {
         this.postService = postService;
     }
 
+
     // 로그인한 사용자 게시물을 제외한 모든 게시물조회
     @GetMapping("/orderfeedlist")
-    public List<PostResponseDto> getOtherPostList(@RequestBody PostRequestDto requestDto, @AuthenticationPrincipal MemberDetailsImpl memberDetails) {
+    public List<PostResponseDto> getOtherPostList(@AuthenticationPrincipal MemberDetailsImpl memberDetails) {
         try {
-            return postService.getOtherPostList(requestDto, memberDetails);
+            return postService.getOtherPostList(memberDetails);
         } catch (Exception e) {
             e.printStackTrace();
             return Collections.emptyList();
         }
     }
+
 }
 
