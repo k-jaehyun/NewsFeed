@@ -83,6 +83,11 @@ public class PostService {
 
     }
 
+    public List<PostResponseDto> getMyPostList(MemberDetailsImpl memberDetails) {
+        Long memberId = memberDetails.getMember().getId();
+        return postRepository.findByMemberId(memberId).stream().map(PostResponseDto::new).toList();
+    }
+
     private Post verifyMember(Member member, Long postId) {
         Post post = findPostById(postId);
         if (!post.getMember().getUserId().equals(member.getUserId())) {

@@ -71,7 +71,10 @@ public class PostController {
         return postService.toggleLikePost(postId,memberDetails);
     }
 
-    //댓글 수정 구현
+    @GetMapping("/myposts")
+    public List<PostResponseDto> getMyPostList(@AuthenticationPrincipal MemberDetailsImpl memberDetails) {
+        return postService.getMyPostList(memberDetails);
+    }
 
     //댓글 삭제 구현
 
