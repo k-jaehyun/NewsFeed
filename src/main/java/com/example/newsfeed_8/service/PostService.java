@@ -67,9 +67,20 @@ public class PostService {
         List<Post> otherUserPosts = postRepository.findByMemberIdNot(currentMember.getId());
 
         List<PostResponseDto> otherUserPostsDto = otherUserPosts.stream()
-                // Post 엔티티를 PostResponseDto로 변환
                 .map(PostResponseDto::new)
                 .collect(Collectors.toList());
         return otherUserPostsDto;
+    }
+    // 현재 로그인한 사용자 게시물만 조회
+    public List<PostResponseDto> getOwnPostList(MemberDetailsImpl memberDetails) {
+        Member currentMember = memberDetails.getMember();
+
+        List<Post> ownPosts = postRepository.findByMemberId(currentMember.getId());
+
+        List<PostResponseDto> ownPostsDto = ownPosts.stream()
+                .map(PostResponseDto::new)
+                .collect(Collectors.toList());
+        return ownPostsDto;
+
     }
 }

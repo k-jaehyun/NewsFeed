@@ -25,11 +25,21 @@ public class NewsFeedController {
     }
 
 
-    // 로그인한 사용자 게시물을 제외한 모든 게시물조회
-    @GetMapping("/orderfeedlist")
+    // 로그인 한 사용자 게시물을 제외한 모든 게시물조회
+    @GetMapping("/others")
     public List<PostResponseDto> getOtherPostList(@AuthenticationPrincipal MemberDetailsImpl memberDetails) {
         try {
             return postService.getOtherPostList(memberDetails);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+    // 로그인 한 사용자 게시물만 조회
+    @GetMapping("/own")
+    public List<PostResponseDto> getOwnPostList(@AuthenticationPrincipal MemberDetailsImpl memberDetails) {
+        try {
+            return postService.getOwnPostList(memberDetails);
         } catch (Exception e) {
             e.printStackTrace();
             return Collections.emptyList();
