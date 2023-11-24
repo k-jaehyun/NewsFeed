@@ -62,13 +62,13 @@ public class PostService {
             } else if (s.equals(member.getUserId()) && !booleanLike) {
                 memberIdList.remove(member.getUserId()); // 좋아요 취소
                 post.minusLikes();
-                return Long.valueOf(post.getLikes());
+                return post.getLikes();
             }
         }
         if (booleanLike) {
             memberIdList.add(member.getUserId());
             post.plusLikes();
-            return Long.valueOf(post.getLikes());
+            return post.getLikes();
         }
         return null;
     }

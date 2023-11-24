@@ -33,7 +33,7 @@ public class Post extends Timestamped {
     private List<String> memberIdList = new ArrayList<>();
 
     @Column
-    private int likes =0;
+    private Long likes = 0L;
 
     @OneToMany(mappedBy = "post")
     private List<PostComment> postCommentList = new ArrayList<>();
