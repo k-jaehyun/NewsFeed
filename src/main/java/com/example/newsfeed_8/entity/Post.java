@@ -5,6 +5,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "post")
 @Getter
@@ -27,6 +30,14 @@ public class Post extends Timestamped {
     @Column
     private String img;
 
+    private List<String> memberIdList = new ArrayList<>();
+
+    @Column
+    private int likes =0;
+
+    @OneToMany(mappedBy = "post")
+    private List<PostComment> postCommentList = new ArrayList<>();
+
     public Post(PostRequestDto requestDto, Member member) {
         this.member = member;
         this.title = requestDto.getTitle();
@@ -38,5 +49,13 @@ public class Post extends Timestamped {
         this.title=requestDto.getTitle();
         this.content= requestDto.getContent();
         this.img= requestDto.getImg();
+    }
+
+    public void plusLikes() {
+        this.likes++;
+    }
+
+    public void minusLikes() {
+        this.likes--;
     }
 }
