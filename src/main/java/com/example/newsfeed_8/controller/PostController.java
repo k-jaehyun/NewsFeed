@@ -36,7 +36,7 @@ public class PostController {
         return postService.getPost(postId);
     }
 
-    @GetMapping("/news_feed_list")    //no-auth
+    @GetMapping("/newsFeedList")    //no-auth
     public List<PostListResponseDto> getPostList() {
         return postRepository.findAllByOrderByCreatedAtDesc().stream().map(PostListResponseDto::new).toList();
     }
