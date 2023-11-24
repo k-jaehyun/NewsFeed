@@ -52,4 +52,16 @@ public class MemberDto {
         private String introduction;
     }
 
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class GetMyAccountResponseDto {
+
+        private String userId;
+        private String email;
+        private String introduction;
+    }
+
 }

@@ -42,6 +42,17 @@ public class MemberService {
         }
     }
 
+    public MemberDto.GetMyAccountResponseDto getMyAccount(Member member) throws Exception {
+
+        MemberDto.GetMyAccountResponseDto responseDto = MemberDto.GetMyAccountResponseDto.builder()
+                .userId(member.getUserId())
+                .email(member.getEmail())
+                .introduction(member.getIntroduction())
+                .build();
+
+        return responseDto;
+    }
+
     public CommonResponseDto updateEmail(Member member,
             MemberDto.UpdateEmailRequestDto dto) throws Exception {
 
