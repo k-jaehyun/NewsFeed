@@ -23,9 +23,9 @@ public class PostController {
     private final PostRepository postRepository;
 
     @PostMapping("/post")
-    public ResponseEntity<CommonResponseDto> createPost(@RequestBody PostRequestDto reqeustDto, @AuthenticationPrincipal MemberDetailsImpl memberDetails) {
+    public ResponseEntity<CommonResponseDto> createPost(@RequestBody PostRequestDto requestDto, @AuthenticationPrincipal MemberDetailsImpl memberDetails) {
         try {
-            postService.createPost(reqeustDto,memberDetails.getMember());
+            postService.createPost(requestDto,memberDetails.getMember());
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest()
                     .body(new CommonResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
@@ -58,6 +58,7 @@ public class PostController {
 
     @DeleteMapping("/post/{post_id}")
     public ResponseEntity<CommonResponseDto> deletePost(@PathVariable Long post_id, @AuthenticationPrincipal MemberDetailsImpl memberDetails) {
+
         try {
             postService.deletePost(post_id,memberDetails);
         } catch (IllegalArgumentException e) {

@@ -16,4 +16,5 @@ public class PostListResponseDto {
         this.img = post.getImg();
         this.createdAt = post.getCreatedAt();
     }
+
 }

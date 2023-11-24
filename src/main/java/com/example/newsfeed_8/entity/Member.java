@@ -3,6 +3,7 @@ package com.example.newsfeed_8.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.Authentication;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,4 +39,5 @@ public class Member {
         this.email = email;
         this.introduction = introduction;
     }
+
 }
