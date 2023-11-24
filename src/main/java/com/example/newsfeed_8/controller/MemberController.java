@@ -6,6 +6,7 @@ import com.example.newsfeed_8.dto.MemberRequestDto;
 import com.example.newsfeed_8.jwt.JwtUtil;
 import com.example.newsfeed_8.security.MemberDetailsImpl;
 import com.example.newsfeed_8.service.MemberService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -56,6 +57,15 @@ public class MemberController {
         return ResponseEntity.ok().body(new CommonResponseDto("로그인 성공", HttpStatus.OK.value()));
     }
 
+    @PostMapping("/logout")
+    public ResponseEntity<CommonResponseDto> logout(HttpServletRequest request){
+        try {
+            memberService.logout(request);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest()
+                    .body(new CommonResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
+        }
+
     @GetMapping("")
     public ResponseEntity<MemberDto.GetMyAccountResponseDto> getMyAccount(
             @AuthenticationPrincipal MemberDetailsImpl memberDetails) throws Exception {
@@ -91,4 +101,6 @@ public class MemberController {
                 .body(memberService.updateIntroduction(memberDetails.getMember(), requestDto));
     }
 
+        return ResponseEntity.ok().body(new CommonResponseDto("로그아웃 성공", HttpStatus.OK.value()));
+    }
 }
