@@ -1,6 +1,7 @@
 package com.example.newsfeed_8.service;
 
 import com.example.newsfeed_8.dto.CommonLikeResponseDto;
+import com.example.newsfeed_8.dto.PostCreateResponseDto;
 import com.example.newsfeed_8.dto.PostRequestDto;
 import com.example.newsfeed_8.dto.PostResponseDto;
 import com.example.newsfeed_8.entity.Like;
@@ -25,8 +26,9 @@ public class PostService {
     private final PostRepository postRepository;
     private final LikeRepository likeRepository;
 
-    public void createPost(PostRequestDto requestDto, Member member) {
-        postRepository.save(new Post(requestDto,member));
+    public PostCreateResponseDto createPost(PostRequestDto requestDto, Member member) {
+        Post post = postRepository.save(new Post(requestDto,member));
+        return new PostCreateResponseDto(post.getId());
     }
 
     public PostResponseDto getPost(Long postId) {

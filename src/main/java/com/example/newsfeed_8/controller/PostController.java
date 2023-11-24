@@ -1,6 +1,7 @@
 package com.example.newsfeed_8.controller;
 
 import com.example.newsfeed_8.dto.*;
+import com.example.newsfeed_8.entity.Post;
 import com.example.newsfeed_8.repository.PostRepository;
 import com.example.newsfeed_8.security.MemberDetailsImpl;
 import com.example.newsfeed_8.service.PostService;
@@ -8,11 +9,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
+@Controller
 @RequiredArgsConstructor
 @RequestMapping("/api/posts")
 public class PostController {
@@ -20,50 +23,33 @@ public class PostController {
     private final PostRepository postRepository;
 
     @PostMapping("")
-    public ResponseEntity<CommonResponseDto> createPost(@RequestBody PostRequestDto requestDto, @AuthenticationPrincipal MemberDetailsImpl memberDetails) {
-        try {
-            postService.createPost(requestDto, memberDetails.getMember());
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest()
-                    .body(new CommonResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
-        }
-
-        return ResponseEntity.ok().body(new CommonResponseDto("게시물 작성 성공", HttpStatus.OK.value()));
+    public String createPost(@RequestBody PostRequestDto requestDto, @AuthenticationPrincipal MemberDetailsImpl memberDetails) {
+        PostCreateResponseDto createdPost = postService.createPost(requestDto, memberDetails.getMember());
+        return "redirect:/api/posts/"+createdPost.getPostId();
     }
 
+    @ResponseBody
     @GetMapping("/{postId}")     //no-auth
     public PostResponseDto getPost(@PathVariable Long postId) {
         return postService.getPost(postId);
     }
 
+    @ResponseBody
     @GetMapping("")    //no-auth
     public List<PostListResponseDto> getPostList() {
         return postRepository.findAllByOrderByCreatedAtDesc().stream().map(PostListResponseDto::new).toList();
     }
 
     @PatchMapping("/{postId}")
-    public ResponseEntity<CommonResponseDto> updatePost(@PathVariable Long postId, @RequestBody PostRequestDto requestDto, @AuthenticationPrincipal MemberDetailsImpl memberDetails) {
-        try {
+    public String updatePost(@PathVariable Long postId, @RequestBody PostRequestDto requestDto, @AuthenticationPrincipal MemberDetailsImpl memberDetails) {
             postService.updatePost(postId, requestDto, memberDetails);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest()
-                    .body(new CommonResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
-        }
-
-        return ResponseEntity.ok().body(new CommonResponseDto("게시물 수정 성공", HttpStatus.OK.value()));
+        return "redirect:/api/posts/"+postId;
     }
 
     @DeleteMapping("/{postId}")
-    public ResponseEntity<CommonResponseDto> deletePost(@PathVariable Long postId, @AuthenticationPrincipal MemberDetailsImpl memberDetails) {
-        try {
+    public String deletePost(@PathVariable Long postId, @AuthenticationPrincipal MemberDetailsImpl memberDetails) {
             postService.deletePost(postId, memberDetails);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest()
-                    .body(new CommonResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
-        }
-
-        return ResponseEntity.ok().body(new CommonResponseDto("게시물 삭제 성공", HttpStatus.OK.value()));
-
+            return "redirect:/api/posts";
     }
 
     @PostMapping("/{postId}/like")
@@ -71,6 +57,7 @@ public class PostController {
         return postService.toggleLikePost(postId,memberDetails);
     }
 
+    @ResponseBody
     @GetMapping("/myposts")
     public List<PostResponseDto> getMyPostList(@AuthenticationPrincipal MemberDetailsImpl memberDetails) {
         return postService.getMyPostList(memberDetails);
