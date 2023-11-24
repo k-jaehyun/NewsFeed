@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,7 +27,7 @@ public class MemberController {
     private final MemberService memberService;
     private final JwtUtil jwtUtil;
 
-    @PostMapping("")
+    @PostMapping("signup")
     public ResponseEntity<CommonResponseDto> signup(
             @Valid @RequestBody MemberRequestDto memberRequestDto) {
         try {
@@ -53,6 +54,14 @@ public class MemberController {
                 jwtUtil.createToken(memberRequestDto.getUserId()));
 
         return ResponseEntity.ok().body(new CommonResponseDto("로그인 성공", HttpStatus.OK.value()));
+    }
+
+    @GetMapping("")
+    public ResponseEntity<MemberDto.GetMyAccountResponseDto> getMyAccount(
+            @AuthenticationPrincipal MemberDetailsImpl memberDetails) throws Exception {
+
+        return ResponseEntity.ok()
+                .body(memberService.getMyAccount(memberDetails.getMember()));
     }
 
     @PatchMapping("/email")
