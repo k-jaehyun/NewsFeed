@@ -33,7 +33,7 @@ public class NewsFeedController {
         }
     }
     // 로그인 한 사용자 게시물만 조회
-    @GetMapping("/myposts")
+    @GetMapping("/myposts")  // api수정 필요 혹은 PostController에 있는 것으로 대체
     public List<PostResponseDto> getOwnPostList(@AuthenticationPrincipal MemberDetailsImpl memberDetails) {
         try {
             return postService.getOwnPostList(memberDetails);
