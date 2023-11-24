@@ -4,11 +4,8 @@ import com.example.newsfeed_8.dto.CommonResponseDto;
 import com.example.newsfeed_8.dto.MemberDto;
 import com.example.newsfeed_8.dto.MemberRequestDto;
 import com.example.newsfeed_8.entity.Member;
-import com.example.newsfeed_8.jwt.JwtUtil;
 import com.example.newsfeed_8.repository.MemberRepository;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,9 +17,6 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
-    private final RedisTemplate<String, String> redisTemplate;
-    private final JwtUtil jwtUtil;
-
 
     public void signup(MemberRequestDto memberRequestDto) {
         String userId = memberRequestDto.getUserId();
@@ -47,17 +41,6 @@ public class MemberService {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
     }
-
-
-    public void logout(HttpServletRequest request) {
-        String token = request.getHeader("Authorization");
-        String redisToken = token.substring(7);
-        long remainingTime = jwtUtil.getRemainingTime(redisToken);
-        if(remainingTime >0){
-            jwtUtil.blacklistToken((redisToken));
-            System.out.println("토큰 삭제");
-        }
-
 
     public MemberDto.GetMyAccountResponseDto getMyAccount(Member member) throws Exception {
 

@@ -6,14 +6,12 @@ import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Component
@@ -27,12 +25,6 @@ public class JwtUtil {
     private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
 
     private Key key;
-
-    private final RedisTemplate<String , String > redisTemplate;
-
-    public JwtUtil(RedisTemplate<String, String> redisTemplate) {
-        this.redisTemplate = redisTemplate;
-    }
 
     @PostConstruct
     public void init(){
@@ -70,36 +62,14 @@ public class JwtUtil {
 
     public String createToken(String userId){
         Date date = new Date();
+
         long TOKEN_TIME = 1000*60*60;
-        Date expirationDate = new Date(date.getTime() + TOKEN_TIME);
-        String token = BEARER_PREFIX +
+        return BEARER_PREFIX +
                 Jwts.builder()
                         .setSubject(userId)
-                        .setExpiration(expirationDate)
+                        .setExpiration(new Date(date.getTime()+TOKEN_TIME))
                         .setIssuedAt(date)
                         .signWith(key, signatureAlgorithm)
                         .compact();
-        long remainingTime = expirationDate.getTime() - date.getTime();
-        redisTemplate.opsForValue().set(token.substring(7), String.valueOf(remainingTime), TOKEN_TIME, TimeUnit.MILLISECONDS);
-        System.out.println("토큰 저장");
-        return token;
     }
-
-    public boolean isTokenBlacklisted(String token){
-        return redisTemplate.hasKey(token);
-    }
-
-    public void blacklistToken(String token){
-        redisTemplate.delete(token);
-    }
-
-    public long getRemainingTime(String token){
-        String remainingTimeStr = redisTemplate.opsForValue().get(token);
-        if(remainingTimeStr != null){
-            return Long.parseLong(remainingTimeStr);
-        }
-
-        return 0;
-    }
-
 }
