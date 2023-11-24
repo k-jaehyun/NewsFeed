@@ -15,6 +15,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class PostService {
@@ -92,5 +95,30 @@ public class PostService {
         return postRepository.findById(id).orElseThrow(()->new IllegalArgumentException("존재하지 않는 postId입니다."));
     }
 
+    // 뉴스 피드
+    // 현재 로그인한 사용자가 자신의 글을 제외한 다른 사용자의 모든 게시글 조회
+    public List<PostResponseDto> getOtherPostList(MemberDetailsImpl memberDetails) {
+        Member currentMember = memberDetails.getMember();
+
+
+        List<Post> otherUserPosts = postRepository.findByMemberIdNot(currentMember.getId());
+
+        List<PostResponseDto> otherUserPostsDto = otherUserPosts.stream()
+                .map(PostResponseDto::new)
+                .collect(Collectors.toList());
+        return otherUserPostsDto;
+    }
+    // 현재 로그인한 사용자 게시물만 조회
+    public List<PostResponseDto> getOwnPostList(MemberDetailsImpl memberDetails) {
+        Member currentMember = memberDetails.getMember();
+
+        List<Post> ownPosts = postRepository.findByMemberId(currentMember.getId());
+
+        List<PostResponseDto> ownPostsDto = ownPosts.stream()
+                .map(PostResponseDto::new)
+                .collect(Collectors.toList());
+        return ownPostsDto;
+
+    }
 
 }
