@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 public class NewsFeedController {
     private final PostService postService;
 
-
     public NewsFeedController(PostService postService) {
         this.postService = postService;
     }
