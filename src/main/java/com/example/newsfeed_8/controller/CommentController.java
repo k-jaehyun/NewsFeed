@@ -15,7 +15,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.List;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/comments")
 public class CommentController {
@@ -23,22 +23,11 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping("/{postId}")
-    private RedirectView createComment(@PathVariable Long postId, @RequestBody CommentRequestDto requestDto, @AuthenticationPrincipal MemberDetailsImpl memberDetails) {
-        RedirectView redirectView = new RedirectView("redirect:/api/comments/"+postId);
-
-        try {
+    private List<CommentResponsDto> createComment(@PathVariable Long postId, @RequestBody CommentRequestDto requestDto, @AuthenticationPrincipal MemberDetailsImpl memberDetails) {
             commentService.createComment(postId, requestDto, memberDetails);
-        } catch (IllegalArgumentException e) {
-            redirectView.setStatusCode(HttpStatus.BAD_REQUEST);
-            return redirectView;
-        }
-
-        redirectView.setStatusCode(HttpStatus.MOVED_PERMANENTLY);
-
-        return redirectView;
+        return commentService.getComments(postId);
     }
 
-    @ResponseBody
     @GetMapping("/{postId}")  //no-auth
     private List<CommentResponsDto> getComments(@PathVariable Long postId) {
         return commentService.getComments(postId);

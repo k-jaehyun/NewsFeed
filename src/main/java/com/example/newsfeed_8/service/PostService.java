@@ -17,6 +17,7 @@ import java.util.List;
 public class PostService {
 
     private final PostRepository postRepository;
+//    private final LikeRepository likeRepository;
 
     public void createPost(PostRequestDto requestDto, Member member) {
         postRepository.save(new Post(requestDto,member));
@@ -48,30 +49,16 @@ public class PostService {
         return "삭제 성공";
     }
 
-    @Transactional
-    public Long toggleLikePost(Long postId, Boolean booleanLike, MemberDetailsImpl memberDetails) {
-        Member member = memberDetails.getMember();
-        Post post = findPostById(postId);
-
-        if (member.getUserId().equals(post.getMember().getUserId())) { return null; }
-
-        List<String> memberIdList = post.getMemberIdList();
-        for (String s : memberIdList) {
-            if (s.equals(member.getUserId()) && booleanLike) {
-                return null;
-            } else if (s.equals(member.getUserId()) && !booleanLike) {
-                memberIdList.remove(member.getUserId()); // 좋아요 취소
-                post.minusLikes();
-                return post.getLikes();
-            }
-        }
-        if (booleanLike) {
-            memberIdList.add(member.getUserId());
-            post.plusLikes();
-            return post.getLikes();
-        }
-        return null;
-    }
+//    public void toggleLikePost(Long postId, MemberDetailsImpl memberDetails) {
+//        Post post = findPostById(postId);
+//        Member member = memberDetails.getMember();
+//        if(post.getMember().getUserId().equals(member.getUserId())) {
+//            throw new IllegalArgumentException("본인의 게시글 입니다.");
+//        }
+//        if()
+//        likeRepository.save(new LikeResponseDto(post,member));
+//
+//    }
 
 
     private Post verifyMember(Member member, Long postId) {

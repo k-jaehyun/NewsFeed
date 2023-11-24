@@ -1,12 +1,7 @@
 package com.example.newsfeed_8.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
@@ -36,11 +31,14 @@ public class Member {
     @Column(nullable = false)
     private String introduction;
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member")  //LAZY 주의
     private List<Post> postList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member")  //LAZY 주의
     private List<Comment> commentList = new ArrayList<>();
+
+//    @OneToMany(mappedBy = "member")  //LAZY 주의
+//    private List<Like> likeList = new ArrayList<>();
 
     public Member(String userId, String password, String email, String introduction) {
         this.userId = userId;
