@@ -9,7 +9,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.List;
 
@@ -21,15 +23,9 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping("/{postId}")
-    private ResponseEntity<CommonResponseDto> createComment(@PathVariable Long postId, @RequestBody CommentRequestDto requestDto, @AuthenticationPrincipal MemberDetailsImpl memberDetails) {
-        try {
+    private List<CommentResponsDto> createComment(@PathVariable Long postId, @RequestBody CommentRequestDto requestDto, @AuthenticationPrincipal MemberDetailsImpl memberDetails) {
             commentService.createComment(postId, requestDto, memberDetails);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest()
-                    .body(new CommonResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
-        }
-
-        return ResponseEntity.ok().body(new CommonResponseDto("댓글 작성 성공", HttpStatus.OK.value()));
+        return commentService.getComments(postId);
     }
 
     @GetMapping("/{postId}")  //no-auth

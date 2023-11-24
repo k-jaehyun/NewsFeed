@@ -10,7 +10,7 @@ public class CommentResponsDto {
 
     private String userId;
     private String content;
-    private Boolean isDeleted= false;
+    private Boolean isDeleted;
 
     public CommentResponsDto(Comment comment) {
         this.userId=comment.getMember().getUserId();

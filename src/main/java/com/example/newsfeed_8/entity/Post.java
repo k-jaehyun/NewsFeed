@@ -30,13 +30,11 @@ public class Post extends Timestamped {
     @Column
     private String img;
 
-    private List<String> memberIdList = new ArrayList<>();
+    @OneToMany(mappedBy = "post")  //LAZY 주의
+    private List<Comment> commentList = new ArrayList<>();
 
-    @Column
-    private int likes =0;
-
-    @OneToMany(mappedBy = "post")
-    private List<PostComment> postCommentList = new ArrayList<>();
+    @OneToMany(mappedBy = "post")  //LAZY 주의
+    private List<Like> likeList = new ArrayList<>();
 
     public Post(PostRequestDto requestDto, Member member) {
         this.member = member;
@@ -51,11 +49,4 @@ public class Post extends Timestamped {
         this.img= requestDto.getImg();
     }
 
-    public void plusLikes() {
-        this.likes++;
-    }
-
-    public void minusLikes() {
-        this.likes--;
-    }
 }

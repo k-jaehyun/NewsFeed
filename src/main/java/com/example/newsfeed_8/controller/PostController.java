@@ -36,7 +36,7 @@ public class PostController {
         return postService.getPost(postId);
     }
 
-    @GetMapping("/newsFeedList")    //no-auth
+    @GetMapping("")    //no-auth
     public List<PostListResponseDto> getPostList() {
         return postRepository.findAllByOrderByCreatedAtDesc().stream().map(PostListResponseDto::new).toList();
     }
@@ -66,19 +66,9 @@ public class PostController {
 
     }
 
-    @GetMapping("/{postId}/{booleanLike}")
-    public ResponseEntity<LikesResponseDto> toggleLikePost(@PathVariable Long postId, @PathVariable Boolean booleanLike, @AuthenticationPrincipal MemberDetailsImpl memberDetails) {
-
-            Long likes = postService.toggleLikePost(postId, booleanLike, memberDetails);
-            if(likes != null) {
-                if (booleanLike) {
-                    return ResponseEntity.ok().body(new LikesResponseDto("좋아요 성공", HttpStatus.OK.value(),likes));
-                } else {
-                    return ResponseEntity.ok().body(new LikesResponseDto("좋아요 취소 성공", HttpStatus.OK.value(),likes));
-                }
-            }
-
-        return ResponseEntity.ok().body(new LikesResponseDto("잘못된 요청입니다.", HttpStatus.BAD_REQUEST.value(),null));
+    @PostMapping("/{postId}/like")
+    public ResponseEntity<CommonLikeResponseDto> toggleLikePost(@PathVariable Long postId, @AuthenticationPrincipal MemberDetailsImpl memberDetails) {
+        return postService.toggleLikePost(postId,memberDetails);
     }
 
 

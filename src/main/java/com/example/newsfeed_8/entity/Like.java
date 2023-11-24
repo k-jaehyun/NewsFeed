@@ -1,24 +1,17 @@
 package com.example.newsfeed_8.entity;
 
-import com.example.newsfeed_8.dto.CommentRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="comment")
+@Table(name="post_like")
 @Getter
 @NoArgsConstructor
-public class Comment {
+public class Like {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column
-    private String content;
-
-    @Column
-    private Boolean isDeleted= false;
 
     @ManyToOne
     @JoinColumn(name = "member_id", nullable = false)
@@ -28,9 +21,16 @@ public class Comment {
     @JoinColumn(name = "post_id", nullable = false)
     private Post post;
 
-    public Comment(CommentRequestDto requestDto, Member member,Post post) {
-        this.content= requestDto.getContent();
-        this.member=member;
+    @Column
+    private Boolean isLike = false;
+
+    public Like(Post post, Member member, boolean b) {
         this.post=post;
+        this.member=member;
+        this.isLike=b;
+    }
+
+    public void setIsLike(Boolean trueOrFalse) {
+        this.isLike = trueOrFalse;
     }
 }

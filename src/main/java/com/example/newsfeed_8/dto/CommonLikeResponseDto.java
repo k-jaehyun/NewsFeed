@@ -11,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @AllArgsConstructor
-public class LikesResponseDto {
+public class CommonLikeResponseDto {
     private String msg;
     private Integer statusCode;
     private Long likes;
