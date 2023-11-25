@@ -18,6 +18,17 @@ public class MemberDto {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
+    public static class SendEmailRequestDto {
+
+        @Email
+        private String email;
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class UpdateEmailRequestDto {
 
         @Email

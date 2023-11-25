@@ -46,12 +46,14 @@ public class WebSecurityConfig {
 
         http.authorizeHttpRequests((authorizeHttpRequests) ->
                 authorizeHttpRequests
-                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                        .requestMatchers(HttpMethod.POST,"/api/members").permitAll()
-                        .requestMatchers("/api/members/login").permitAll()
-                        .requestMatchers("/api/posts/{post_id}").permitAll()
-                        .requestMatchers("/api/posts/news_feed_list").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/api/comments/{postId}").permitAll()
+                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
+                        .permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/members").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/members/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/members/email/send").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/posts/{post_id}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/posts/news_feed_list").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/comments/{postId}").permitAll()
                         .anyRequest().authenticated()
         );
 
