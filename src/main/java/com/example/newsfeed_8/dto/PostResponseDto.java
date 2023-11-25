@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class PostResponseDto {
+    private Long postId;
     private String title;
     private String user_id;
     private String content;
@@ -18,6 +19,7 @@ public class PostResponseDto {
 
 
     public PostResponseDto(Post post) {
+        this.postId = post.getId();
         this.title = post.getTitle();;
         this.user_id = post.getMember().getUserId();
         this.content = post.getContent();

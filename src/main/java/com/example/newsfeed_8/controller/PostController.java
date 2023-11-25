@@ -1,16 +1,13 @@
 package com.example.newsfeed_8.controller;
 
 import com.example.newsfeed_8.dto.*;
-import com.example.newsfeed_8.entity.Post;
 import com.example.newsfeed_8.repository.PostRepository;
 import com.example.newsfeed_8.security.MemberDetailsImpl;
 import com.example.newsfeed_8.service.PostService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -54,15 +51,7 @@ public class PostController {
 
     @PostMapping("/{postId}/like")
     public ResponseEntity<CommonLikeResponseDto> toggleLikePost(@PathVariable Long postId, @AuthenticationPrincipal MemberDetailsImpl memberDetails) {
-        return postService.toggleLikePost(postId,memberDetails);
+        return postService.togglePostLike(postId,memberDetails);
     }
-
-    @ResponseBody
-    @GetMapping("/myposts")
-    public List<PostResponseDto> getMyPostList(@AuthenticationPrincipal MemberDetailsImpl memberDetails) {
-        return postService.getMyPostList(memberDetails);
-    }
-
-    //댓글 삭제 구현
 
 }

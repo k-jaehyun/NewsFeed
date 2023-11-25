@@ -4,10 +4,10 @@ import com.example.newsfeed_8.dto.CommonLikeResponseDto;
 import com.example.newsfeed_8.dto.PostCreateResponseDto;
 import com.example.newsfeed_8.dto.PostRequestDto;
 import com.example.newsfeed_8.dto.PostResponseDto;
-import com.example.newsfeed_8.entity.Like;
+import com.example.newsfeed_8.entity.PostLike;
 import com.example.newsfeed_8.entity.Member;
 import com.example.newsfeed_8.entity.Post;
-import com.example.newsfeed_8.repository.LikeRepository;
+import com.example.newsfeed_8.repository.PostLikeRepository;
 import com.example.newsfeed_8.repository.PostRepository;
 import com.example.newsfeed_8.security.MemberDetailsImpl;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 public class PostService {
 
     private final PostRepository postRepository;
-    private final LikeRepository likeRepository;
+    private final PostLikeRepository postLikeRepository;
 
     public PostCreateResponseDto createPost(PostRequestDto requestDto, Member member) {
         Post post = postRepository.save(new Post(requestDto,member));
@@ -58,7 +58,7 @@ public class PostService {
     }
 
     @Transactional
-    public ResponseEntity<CommonLikeResponseDto> toggleLikePost(Long postId, MemberDetailsImpl memberDetails) {
+    public ResponseEntity<CommonLikeResponseDto> togglePostLike(Long postId, MemberDetailsImpl memberDetails) {
         try {
             Post post = findPostById(postId);
             Member member = memberDetails.getMember();
@@ -67,15 +67,15 @@ public class PostService {
                 throw new IllegalArgumentException("본인의 게시글 입니다.");
             }
 
-            Like like = likeRepository.findByPostIdAndMemberId(post.getId(), member.getId());
+            PostLike postLike = postLikeRepository.findByPostIdAndMemberId(post.getId(), member.getId());
 
-            if (like == null) {
-                likeRepository.save(new Like(post,member,true));
+            if (postLike == null) {
+                postLikeRepository.save(new PostLike(post,member,true));
             } else {
-                like.setIsLike(!like.getIsLike());
+                postLike.setIsLike(!postLike.getIsLike());
             }
 
-            Long likes = (long) likeRepository.countByPostIdAndIsLikeTrue(post.getId());
+            Long likes = (long) postLikeRepository.countByPostIdAndIsLikeTrue(post.getId());
 
             return ResponseEntity.ok().body(new CommonLikeResponseDto("좋아요/좋아요취소 성공", HttpStatus.OK.value(),likes));
         } catch (IllegalArgumentException e) {
@@ -83,11 +83,6 @@ public class PostService {
                     .body(new CommonLikeResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value(),null));
         }
 
-    }
-
-    public List<PostResponseDto> getMyPostList(MemberDetailsImpl memberDetails) {
-        Long memberId = memberDetails.getMember().getId();
-        return postRepository.findByMemberId(memberId).stream().map(PostResponseDto::new).toList();
     }
 
     private Post verifyMember(Member member, Long postId) {
