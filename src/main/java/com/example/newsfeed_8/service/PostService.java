@@ -29,12 +29,9 @@ public class PostService {
     }
 
     public PostResponseDto getPost(Long postId) {
-        return new PostResponseDto(findPost(postId));
+        return new PostResponseDto(findPostById(postId));
     }
 
-    private Post findPost(Long postId) {
-        return findPostById(postId);
-    }
 
     @Transactional
     public String updatePost(Long postId, PostRequestDto requestDto, MemberDetailsImpl memberDetails) {
