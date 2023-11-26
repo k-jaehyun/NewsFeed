@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Table(name="post_like")
 @Getter
 @NoArgsConstructor
-public class Like {
+public class PostLike {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,7 +24,7 @@ public class Like {
     @Column
     private Boolean isLike = false;
 
-    public Like(Post post, Member member, boolean b) {
+    public PostLike(Post post, Member member, boolean b) {
         this.post=post;
         this.member=member;
         this.isLike=b;

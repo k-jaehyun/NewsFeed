@@ -30,11 +30,11 @@ public class Post extends Timestamped {
     @Column
     private String img;
 
-    @OneToMany(mappedBy = "post")  //LAZY 주의
+    @OneToMany(mappedBy = "post", orphanRemoval = true)  //LAZY 주의
     private List<Comment> commentList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "post")  //LAZY 주의
-    private List<Like> likeList = new ArrayList<>();
+    @OneToMany(mappedBy = "post",orphanRemoval = true)  //LAZY 주의
+    private List<PostLike> postLikeList = new ArrayList<>();
 
     public Post(PostRequestDto requestDto, Member member) {
         this.member = member;

@@ -49,9 +49,9 @@ public class WebSecurityConfig {
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/members/signup").permitAll()
                         .requestMatchers("/api/members/login").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/api/posts/{post_id}").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/posts/{postId}").permitAll()
                         .requestMatchers(HttpMethod.GET,"/api/posts").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/api/comments/{postId}").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/posts/{postId}/comments").permitAll()
                         .anyRequest().authenticated()
         );
 
