@@ -47,11 +47,11 @@ public class WebSecurityConfig {
         http.authorizeHttpRequests((authorizeHttpRequests) ->
                 authorizeHttpRequests
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                        .requestMatchers(HttpMethod.POST,"/api/members").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/api/members/signup").permitAll()
                         .requestMatchers("/api/members/login").permitAll()
-                        .requestMatchers("/api/posts/{post_id}").permitAll()
-                        .requestMatchers("/api/posts/news_feed_list").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/api/comments/{postId}").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/posts/{postId}").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/posts").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/posts/{postId}/comments").permitAll()
                         .anyRequest().authenticated()
         );
 

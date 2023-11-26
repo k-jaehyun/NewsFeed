@@ -2,41 +2,52 @@ package com.example.newsfeed_8.controller;
 
 import com.example.newsfeed_8.dto.CommentRequestDto;
 import com.example.newsfeed_8.dto.CommentResponsDto;
-import com.example.newsfeed_8.dto.CommonResponseDto;
+import com.example.newsfeed_8.dto.CommonLikeResponseDto;
 import com.example.newsfeed_8.security.MemberDetailsImpl;
 import com.example.newsfeed_8.service.CommentService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
+@Controller
 @RequiredArgsConstructor
-@RequestMapping("/api/comments")
+@RequestMapping("/api/posts/{postId}")
 public class CommentController {
 
     private final CommentService commentService;
 
-    @PostMapping("/{postId}")
-    private ResponseEntity<CommonResponseDto> createComment(@PathVariable Long postId, @RequestBody CommentRequestDto requestDto, @AuthenticationPrincipal MemberDetailsImpl memberDetails) {
-        try {
+    @PostMapping("/comments")
+    private String createComment(@PathVariable Long postId, @RequestBody CommentRequestDto requestDto, @AuthenticationPrincipal MemberDetailsImpl memberDetails) {
             commentService.createComment(postId, requestDto, memberDetails);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest()
-                    .body(new CommonResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
-        }
-
-        return ResponseEntity.ok().body(new CommonResponseDto("댓글 작성 성공", HttpStatus.OK.value()));
+        return "redirect:/api/posts/"+postId+"/comments";
     }
 
-    @GetMapping("/{postId}")  //no-auth
+    @ResponseBody
+    @GetMapping("/comments")  //no-auth
     private List<CommentResponsDto> getComments(@PathVariable Long postId) {
         return commentService.getComments(postId);
     }
 
+    @PostMapping("/comments/{commentId}")
+    private String updateComment(@PathVariable Long postId, @PathVariable Long commentId, @RequestBody CommentRequestDto requestDto, @AuthenticationPrincipal MemberDetailsImpl memberDetails) {
+        commentService.updateComment(postId, commentId, requestDto, memberDetails);
+        return "redirect:/api/posts/"+postId+"/comments";
+    }
+
+    @DeleteMapping("/comments/{commentId}")
+    private String deleteComment(@PathVariable Long postId, @PathVariable Long commentId, @AuthenticationPrincipal MemberDetailsImpl memberDetails) {
+        commentService.deleteComment(postId, commentId, memberDetails);
+        return "redirect:/api/posts/"+postId+"/comments";
+    }
+
+    @PostMapping("/comments/{commentId}/like")
+    public ResponseEntity<CommonLikeResponseDto> toggleLikeComment(@PathVariable Long postId, @PathVariable Long commentId, @AuthenticationPrincipal MemberDetailsImpl memberDetails) {
+        return commentService.toggleCommentLike(postId,commentId,memberDetails);
+    }
 
 
 

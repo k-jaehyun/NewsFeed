@@ -1,18 +1,19 @@
 package com.example.newsfeed_8.controller;
 
-import com.example.newsfeed_8.dto.*;
+import com.example.newsfeed_8.dto.CommonLikeResponseDto;
+import com.example.newsfeed_8.dto.PostCreateResponseDto;
+import com.example.newsfeed_8.dto.PostRequestDto;
+import com.example.newsfeed_8.dto.PostResponseDto;
 import com.example.newsfeed_8.repository.PostRepository;
 import com.example.newsfeed_8.security.MemberDetailsImpl;
 import com.example.newsfeed_8.service.PostService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-@RestController
+@Controller
 @RequiredArgsConstructor
 @RequestMapping("/api/posts")
 public class PostController {
@@ -20,66 +21,50 @@ public class PostController {
     private final PostRepository postRepository;
 
     @PostMapping("")
-    public ResponseEntity<CommonResponseDto> createPost(@RequestBody PostRequestDto requestDto, @AuthenticationPrincipal MemberDetailsImpl memberDetails) {
-        try {
-            postService.createPost(requestDto, memberDetails.getMember());
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest()
-                    .body(new CommonResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
-        }
+    public String createPost(@RequestBody PostRequestDto requestDto, @AuthenticationPrincipal MemberDetailsImpl memberDetails) {
+        PostCreateResponseDto createdPost = postService.createPost(requestDto, memberDetails.getMember());
+        return "redirect:/api/posts/"+createdPost.getPostId();
 
-        return ResponseEntity.ok().body(new CommonResponseDto("게시물 작성 성공", HttpStatus.OK.value()));
+        // 요청에 대한 응답을 줄 때, 헤더에 (Location:"URL")이라는 (key-value) 형태로 url을 담아서 return하는 코드 (새로고침x, 상태메세지는 200으로 뜸)
+//        try {
+//            PostCreateResponseDto createdPost = postService.createPost(requestDto, memberDetails.getMember());
+//
+//            URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+//                    .path("/api/posts/{postId}")
+//                    .buildAndExpand(createdPost.getPostId())
+//                    .toUri();
+//
+//            return ResponseEntity.created(location)
+//                    .body(new CommonResponseDto("게시물 게시 성공", HttpStatus.CREATED.value()));
+//        } catch (IllegalArgumentException e) {
+//            return ResponseEntity.badRequest()
+//                    .body(new CommonResponseDto("뭔가 잘못되었습니다.", HttpStatus.BAD_REQUEST.value()));
+//        }
+
     }
 
+    @ResponseBody
     @GetMapping("/{postId}")     //no-auth
     public PostResponseDto getPost(@PathVariable Long postId) {
         return postService.getPost(postId);
     }
 
-    @GetMapping("/newsFeedList")    //no-auth
-    public List<PostListResponseDto> getPostList() {
-        return postRepository.findAllByOrderByCreatedAtDesc().stream().map(PostListResponseDto::new).toList();
-    }
 
     @PatchMapping("/{postId}")
-    public ResponseEntity<CommonResponseDto> updatePost(@PathVariable Long postId, @RequestBody PostRequestDto requestDto, @AuthenticationPrincipal MemberDetailsImpl memberDetails) {
-        try {
+    public String updatePost(@PathVariable Long postId, @RequestBody PostRequestDto requestDto, @AuthenticationPrincipal MemberDetailsImpl memberDetails) {
             postService.updatePost(postId, requestDto, memberDetails);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest()
-                    .body(new CommonResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
-        }
-
-        return ResponseEntity.ok().body(new CommonResponseDto("게시물 수정 성공", HttpStatus.OK.value()));
+        return "redirect:/api/posts/"+postId;
     }
 
     @DeleteMapping("/{postId}")
-    public ResponseEntity<CommonResponseDto> deletePost(@PathVariable Long postId, @AuthenticationPrincipal MemberDetailsImpl memberDetails) {
-        try {
+    public String deletePost(@PathVariable Long postId, @AuthenticationPrincipal MemberDetailsImpl memberDetails) {
             postService.deletePost(postId, memberDetails);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest()
-                    .body(new CommonResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
-        }
-
-        return ResponseEntity.ok().body(new CommonResponseDto("게시물 삭제 성공", HttpStatus.OK.value()));
-
+            return "redirect:/api/posts";
     }
 
-    @GetMapping("/{postId}/{booleanLike}")
-    public ResponseEntity<LikesResponseDto> toggleLikePost(@PathVariable Long postId, @PathVariable Boolean booleanLike, @AuthenticationPrincipal MemberDetailsImpl memberDetails) {
-
-            Long likes = postService.toggleLikePost(postId, booleanLike, memberDetails);
-            if(likes != null) {
-                if (booleanLike) {
-                    return ResponseEntity.ok().body(new LikesResponseDto("좋아요 성공", HttpStatus.OK.value(),likes));
-                } else {
-                    return ResponseEntity.ok().body(new LikesResponseDto("좋아요 취소 성공", HttpStatus.OK.value(),likes));
-                }
-            }
-
-        return ResponseEntity.ok().body(new LikesResponseDto("잘못된 요청입니다.", HttpStatus.BAD_REQUEST.value(),null));
+    @PostMapping("/{postId}/like")
+    public ResponseEntity<CommonLikeResponseDto> toggleLikePost(@PathVariable Long postId, @AuthenticationPrincipal MemberDetailsImpl memberDetails) {
+        return postService.togglePostLike(postId,memberDetails);
     }
-
 
 }

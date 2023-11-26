@@ -1,30 +1,36 @@
 package com.example.newsfeed_8.entity;
 
-import com.example.newsfeed_8.dto.CommentRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
+@Table(name="comment_like")
 @Getter
 @NoArgsConstructor
-@Table(name = "Post_Comment")
-public class PostComment {
+public class CommentLike {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "post_id", nullable = false)
-    private Post post;
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
 
     @ManyToOne
     @JoinColumn(name = "comment_id", nullable = false)
     private Comment comment;
 
-    public PostComment(Post post, Comment comment) {
-        this.post=post;
+    @Column
+    private Boolean isLike = false;
+
+    public CommentLike(Comment comment, Member member, boolean b) {
         this.comment=comment;
+        this.member=member;
+        this.isLike=b;
+    }
+
+    public void setIsLike(Boolean trueOrFalse) {
+        this.isLike = trueOrFalse;
     }
 }
