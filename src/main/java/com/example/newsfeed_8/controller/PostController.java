@@ -4,6 +4,7 @@ import com.example.newsfeed_8.dto.*;
 import com.example.newsfeed_8.repository.PostRepository;
 import com.example.newsfeed_8.security.MemberDetailsImpl;
 import com.example.newsfeed_8.service.PostService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,6 +24,23 @@ public class PostController {
     public String createPost(@RequestBody PostRequestDto requestDto, @AuthenticationPrincipal MemberDetailsImpl memberDetails) {
         PostCreateResponseDto createdPost = postService.createPost(requestDto, memberDetails.getMember());
         return "redirect:/api/posts/"+createdPost.getPostId();
+
+        // 헤더에  url이 담기는 코드
+//        try {
+//            PostCreateResponseDto createdPost = postService.createPost(requestDto, memberDetails.getMember());
+//
+//            URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+//                    .path("/api/posts/{postId}")
+//                    .buildAndExpand(createdPost.getPostId())
+//                    .toUri();
+//
+//            return ResponseEntity.created(location)
+//                    .body(new CommonResponseDto("게시물 게시 성공", HttpStatus.CREATED.value()));
+//        } catch (IllegalArgumentException e) {
+//            return ResponseEntity.badRequest()
+//                    .body(new CommonResponseDto("뭔가 잘못되었습니다.", HttpStatus.BAD_REQUEST.value()));
+//        }
+
     }
 
     @ResponseBody
@@ -31,11 +49,6 @@ public class PostController {
         return postService.getPost(postId);
     }
 
-    @ResponseBody
-    @GetMapping("")    //no-auth
-    public List<PostListResponseDto> getPostList() {
-        return postRepository.findAllByOrderByCreatedAtDesc().stream().map(PostListResponseDto::new).toList();
-    }
 
     @PatchMapping("/{postId}")
     public String updatePost(@PathVariable Long postId, @RequestBody PostRequestDto requestDto, @AuthenticationPrincipal MemberDetailsImpl memberDetails) {
