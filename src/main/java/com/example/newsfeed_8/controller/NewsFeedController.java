@@ -3,16 +3,12 @@ package com.example.newsfeed_8.controller;
 import com.example.newsfeed_8.dto.PostResponseDto;
 import com.example.newsfeed_8.entity.Post;
 import com.example.newsfeed_8.repository.PostRepository;
-import com.example.newsfeed_8.entity.Post;
-import com.example.newsfeed_8.repository.PostRepository;
 import com.example.newsfeed_8.security.MemberDetailsImpl;
-import com.example.newsfeed_8.service.PostService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,7 +26,7 @@ public class NewsFeedController {
 
     // 로그인 한 사용자 게시물을 제외한 모든 게시물 조회
     // 토큰을 빼면 전체 조회 가능 (신기능 )
-    @GetMapping("/otherposts")
+    @GetMapping("")
     public List<PostResponseDto> getOtherPostList(@AuthenticationPrincipal MemberDetailsImpl memberDetails) {
         try {
             if (memberDetails == null) {
