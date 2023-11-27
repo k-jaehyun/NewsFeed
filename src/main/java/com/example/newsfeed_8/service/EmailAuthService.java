@@ -12,7 +12,7 @@ import org.thymeleaf.spring6.SpringTemplateEngine;
 
 @Service
 @RequiredArgsConstructor
-public class EmailService {
+public class EmailAuthService {
 
     private final JavaMailSender emailSender;
     // 타임리프를사용하기 위한 객체를 의존성 주입으로 가져온다
@@ -25,19 +25,7 @@ public class EmailService {
         StringBuffer key = new StringBuffer();
 
         for (int i = 0; i < 6; i++) {
-            int index = random.nextInt(3);
-
-            switch (index) {
-                case 0:
-                    key.append((char) ((int) random.nextInt(26) + 97));
-                    break;
-                case 1:
-                    key.append((char) ((int) random.nextInt(26) + 65));
-                    break;
-                case 2:
-                    key.append(random.nextInt(9));
-                    break;
-            }
+            key.append(random.nextInt(9));
         }
         authNum = key.toString();
     }
@@ -69,13 +57,11 @@ public class EmailService {
         //메일전송에 필요한 정보 설정
         MimeMessage emailForm = createEmailForm(toEmail);
         try {
+            //실제 메일 전송
             emailSender.send(emailForm);
         } catch (Exception e) {
-            return "fail";
+            return "fail: email send failed";
         }
-
-        //실제 메일 전송
-        emailSender.send(emailForm);
 
         return authNum; //인증 코드 반환
     }

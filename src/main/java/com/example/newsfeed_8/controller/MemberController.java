@@ -5,7 +5,7 @@ import com.example.newsfeed_8.dto.MemberDto;
 import com.example.newsfeed_8.dto.MemberRequestDto;
 import com.example.newsfeed_8.jwt.JwtUtil;
 import com.example.newsfeed_8.security.MemberDetailsImpl;
-import com.example.newsfeed_8.service.EmailService;
+import com.example.newsfeed_8.service.EmailAuthService;
 import com.example.newsfeed_8.service.MemberService;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletResponse;
@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberController {
 
     private final MemberService memberService;
-    private final EmailService emailService;
+    private final EmailAuthService emailAuthService;
     private final JwtUtil jwtUtil;
 
     @PostMapping("signup")
@@ -48,7 +48,7 @@ public class MemberController {
     public String emailSend(@RequestBody MemberDto.SendEmailRequestDto requestDto)
             throws MessagingException, UnsupportedEncodingException {
 
-        String authCode = emailService.sendEmail(requestDto.getEmail());
+        String authCode = emailAuthService.sendEmail(requestDto.getEmail());
         return authCode;
     }
 
