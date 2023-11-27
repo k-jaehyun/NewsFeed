@@ -52,6 +52,7 @@ public class WebSecurityConfig {
 //                        .requestMatchers(HttpMethod.GET,"/api/posts/{postId}").permitAll()
 //                        .requestMatchers(HttpMethod.GET,"/api/posts").permitAll()
 //                        .requestMatchers(HttpMethod.GET,"/api/posts/{postId}/comments").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/api/members/logout").authenticated()
                         .requestMatchers(HttpMethod.GET,"/api/members").authenticated()
                         .requestMatchers(HttpMethod.PATCH,"/api/members/email").authenticated()
                         .requestMatchers(HttpMethod.PATCH,"/api/members/password").authenticated()
